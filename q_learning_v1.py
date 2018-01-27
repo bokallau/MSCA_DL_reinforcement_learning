@@ -29,7 +29,8 @@ HFFG       (G: goal, where the frisbee is located)
 
 BO note: This can be thought of similar to a maze except instead of running into
 a wall the agent falls into the water and the trail run is over.
-It must be noted that the agent will not always move to the square it chooses because of the slippery nature of ice. This incorporates randomness.
+It must be noted that the agent will not always move to the square it chooses because of the slippery nature of ice. This incorporates randomness. But from my understanding the location of the starting point, goal and holes remain the same
+for each trial. This encourages the agent to use its memory to find a solution.
 '''
 
 # impliment q-learning algorithm
@@ -65,10 +66,23 @@ for i in range(num_episodes):
     rList.append(rAll)
     
 print ("Score over time: " +  str(sum(rList)/num_episodes))
+# Score over time: 0.5755
+print("Average number of steps per trial: " +  str(sum(jList)/num_episodes))
+#Average number of steps per trial: 39.884
 
 print ("Final Q-Table Values")
 print (Q)
 
-plt.plot(rList)
-
-plt.plot(jList)
+lines = plt.plot(rList)
+l1 = lines
+plt.setp(l1,linewidth=.1, color='g')
+steps = np.array(jList)/100
+l2 = plt.plot(steps)
+plt.setp(l2,linewidth=.1, color='b')
+plt.show()
+'''
+BO note:
+reduced the width of the lines significantly to allow the failures to be displayed as well.
+you can see the agent starting to reach the goal around 125 trials but there's still many failurs among the sucesses, which is why the score over time is only 57.55%
+Trying to superimpose the number of steps to see if we might get more sucesses if we allowed the agent to take more than 99 steps but the plot is hard to read.
+'''
