@@ -51,6 +51,7 @@ for i in range(num_episodes):
     j = 0
     #The Q-Table learning algorithm
     while j < 99:
+        #env.render()
         j+=1
         #Choose an action by greedily (with noise) picking from Q table
         a = np.argmax(Q[s,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
@@ -64,13 +65,20 @@ for i in range(num_episodes):
             break
     jList.append(j)
     rList.append(rAll)
+# env.close()
     
 print ("Score over time: " +  str(sum(rList)/num_episodes))
 # Score over time: 0.5755
+'''BO restarted the kernal and ran the trails 3 more times, 
+the average score over time of all 4 trials .5341
+'''
 print("Average number of steps per trial: " +  str(sum(jList)/num_episodes))
-#Average number of steps per trial: 39.884
+'''Average number of steps per trial: 39.884
+the average steps of all 4 trials 35.851
+standard deviation of each were fairly high but the average is inline'''
 
 print ("Final Q-Table Values")
+
 print (Q)
 
 lines = plt.plot(rList)
@@ -85,4 +93,13 @@ BO note:
 reduced the width of the lines significantly to allow the failures to be displayed as well.
 you can see the agent starting to reach the goal around 125 trials but there's still many failurs among the sucesses, which is why the score over time is only 57.55%
 Trying to superimpose the number of steps to see if we might get more sucesses if we allowed the agent to take more than 99 steps but the plot is hard to read.
+
+questions for next step: what would happen to the score if the number of steps were allowed to increase to 199? I would expect the algorithm to take longer to run but also slightly improved score.
+
+Increasing the number of trails/episodes should lead to higher scores and a point where the algorithm consistently gets to the goal. We should test this by increasing to 3k or 5k.
+
+The for loop should be broken down extensively so we understand exactly what is going on in the code and make guesses as to why this is a good idea.
+
 '''
+
+
