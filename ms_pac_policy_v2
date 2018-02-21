@@ -19,7 +19,7 @@ try:
     xrange = xrange
 except:
     xrange = range
-
+# this imports the environment
 env = gym.make('MsPacman-ram-v0')
 ''' ms pacman ram gives us the 128 byte RAM of the Atari game, possible actions range from 0-9?'''
 
