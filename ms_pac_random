@@ -59,8 +59,9 @@ print("%d episodes %f seconds - mean total reward %f" % (total_episodes, (time.t
 
 #4000 episodes 13686.985785 seconds - mean total reward 215.903584
 
+#1000 episodes 9592.863213 seconds - mean total reward 218.010101
 # 500 episodes 785.527534 seconds - mean total reward 210.121457
 # 100 ep - 125.149722 seconds - mean total reward - 211.326530612
 # 10 ep - 43 seconds - mean total reward = 194
 
-# should next run for 1000, 2000 and graph results, maybe even predict results for 5000, then run 5000
+# should next run for 2000 and graph results, maybe even predict results for 5000, then run 5000
