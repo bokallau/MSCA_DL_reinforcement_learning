@@ -30,7 +30,7 @@ def discount_rewards(r):
     discounted_r = np.zeros_like(r)
     running_add = 0
     for t in reversed(xrange(0, r.size)):
-        running_add = running_add * gamma + r[t]
+        running_add = running_add * gamma + 1 + r[t]
         discounted_r[t] = running_add
     return discounted_r
 
@@ -114,7 +114,7 @@ with tf.Session() as sess:
             env.render()
             ep_history.append([s,a,r,s1,l])
             s = s1
-            running_reward += r
+            running_reward += (1+r)
             if e > 0.05:
                 e = e - 0.05
             if d == True:
