@@ -40,14 +40,14 @@ class agent():
         self.state_in= tf.placeholder(shape=[None,s_size],dtype=tf.float32)
         hidden1 = slim.fully_connected(self.state_in,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
         hidden2 = slim.fully_connected(hidden1,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden3 = slim.fully_connected(hidden2,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden4 = slim.fully_connected(hidden3,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden5 = slim.fully_connected(hidden4,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden6 = slim.fully_connected(hidden5,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden7 = slim.fully_connected(hidden6,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden8 = slim.fully_connected(hidden7,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden9 = slim.fully_connected(hidden8,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
-        hidden10 = slim.fully_connected(hidden9,h_size,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden3 = slim.fully_connected(hidden2,h_size/2,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden4 = slim.fully_connected(hidden3,h_size/2,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden5 = slim.fully_connected(hidden4,h_size/4,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden6 = slim.fully_connected(hidden5,h_size/4,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden7 = slim.fully_connected(hidden6,h_size/8,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden8 = slim.fully_connected(hidden7,h_size/8,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden9 = slim.fully_connected(hidden8,h_size/16,biases_initializer=None,activation_fn=tf.nn.relu)
+        hidden10 = slim.fully_connected(hidden9,h_size/16,biases_initializer=None,activation_fn=tf.nn.relu)
         self.output = slim.fully_connected(hidden10,a_size,activation_fn=tf.nn.softmax,biases_initializer=None)
         self.chosen_action = tf.argmax(self.output,1)
 
@@ -76,11 +76,11 @@ class agent():
 
 tf.reset_default_graph() #Clear the Tensorflow graph.
 
-myAgent = agent(lr=1e-2,s_size=128,a_size=9,h_size=256) #Load the agent.
+myAgent = agent(lr=1e-5,s_size=128,a_size=9,h_size=1152) #Load the agent.
 
 total_episodes = 5000 #Set total number of episodes to train agent on.
-max_ep = 999
-update_frequency = 5
+max_ep = 9990
+update_frequency = 10
 e = 0.75
 
 init = tf.global_variables_initializer()
@@ -106,17 +106,12 @@ with tf.Session() as sess:
             a_dist = sess.run(myAgent.output,feed_dict={myAgent.state_in:[s]})
             a = np.random.choice(a_dist[0],p=a_dist[0])
             a = np.argmax(a_dist == a)
-            
-            if np.random.rand(1) < e:
-                a = env.action_space.sample()
 
             s1,r,d,l = env.step(a) #Get our reward for taking an action
             env.render()
             ep_history.append([s,a,r,s1,l])
             s = s1
             running_reward += (1+r)
-            if e > 0.05:
-                e = e - 0.05
             if d == True:
                 #Update the network.
                 ep_history = np.array(ep_history)
@@ -143,8 +138,7 @@ with tf.Session() as sess:
             print(np.mean(total_reward[-100:]))
         i += 1
 
-#print("%f seconds" % (time.time() - start_time))
-time_run = time.time() - start_time
+print("%d episodes - %f seconds - mean total reward %f" % (total_episodes, (time.time() - start_time) , (np.mean(total_reward))))
 
 # 10 hidden layers 
 # 1 episode 210.0  1.537064 seconds
