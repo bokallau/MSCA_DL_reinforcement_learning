@@ -16,6 +16,7 @@ Created on Sat Jan 27 22:54:54 2018
 import time
 import numpy as np
 import gym
+import matplotlib.pyplot as plt
 
 
 start_time = time.time()
@@ -23,12 +24,13 @@ start_time = time.time()
 env = gym.make('MsPacman-ram-v0')
 ''' ms pacman ram gives us the 128 byte RAM of the Atari game, possible actions range from 0-9?'''
 
-total_episodes = 500 #Set total number of episodes to train agent on.
+total_episodes = 4000 #Set total number of episodes to train agent on.
 max_ep = 999
 
 i = 0
 total_reward = []
 total_lenght = []
+plot_reward = []
 
         
 while i < total_episodes:
@@ -51,11 +53,15 @@ while i < total_episodes:
 
         
             #Update our running tally of scores.
-    if i % 100 == 0:
-        print(np.mean(total_reward[-100:]))
+    if i % 50 == 0:
+        print(np.mean(total_reward[-50:]))
+        plot_reward.append(np.mean(total_reward[-50:]))
     i += 1
 
+print(np.mean(total_reward[-50:]))
 print("%d episodes %f seconds - mean total reward %f" % (total_episodes, (time.time() - start_time) , (np.mean(total_reward))))
+
+plt.plot(plot_reward)
 
 #4000 episodes 13686.985785 seconds - mean total reward 215.903584
 #1000 episodes 9592.863213 seconds - mean total reward 218.010101
